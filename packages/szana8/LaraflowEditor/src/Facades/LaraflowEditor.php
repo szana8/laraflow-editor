@@ -1,0 +1,18 @@
+<?php
+
+namespace szana8\LaraflowEditor\Facades;
+
+use Illuminate\Support\Facades\Facade;
+
+class LaraflowEditor extends Facade
+{
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'larafloweditor';
+    }
+}
