@@ -5,5 +5,5 @@
 
     <title>Laraflow Editor</title>
 
-    <link rel="stylesheet" href="{{ asset('vendor/schematics/app.css') }}" />
+    <link rel="stylesheet" href="{{ asset('vendor/LaraflowEditor/app.css') }}" />
 </head>
