@@ -12203,6 +12203,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "schema",
   components: {},
@@ -12387,7 +12389,7 @@ __webpack_require__.r(__webpack_exports__);
     };
 
     instance.batch(function () {
-      _addEndpoints("laraflow-editor-start", ["RightMiddle"], []); // _addEndpoints("laraflow-editor-step", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
+      _addEndpoints("laraflow-editor-start", ["BottomCenter"], []); // _addEndpoints("laraflow-editor-step", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
       // _addEndpoints("laraflow-editor-end", [], ["TopCenter"]);
       // listen for new connections; initialise them the same way we initialise the connections at startup.
 
@@ -40626,78 +40628,79 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "flex w-full", attrs: { id: "schema" } }, [
+    _c("div", { staticClass: "flex bg-gray-200 w-full h-screen" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          ref: "container",
+          staticClass: "w-full h-screen flex justify-center pt-8",
+          attrs: { id: "container" }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass:
+                "laraflow-editor-elements absolute rounded-full antialiased font-semibold shadow shadow-md cursor-pointer h-16 w-16 bg-green-100 border border-green-500 flex items-center justify-center",
+              attrs: { id: "laraflow-editor-start" }
+            },
+            [_vm._v("Start")]
+          )
+        ]
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex", attrs: { id: "schema" } }, [
-      _c("div", { staticClass: "flex bg-gray-200 w-full h-screen" }, [
-        _c("div", { staticClass: "ml-3 mt-2" }, [
+    return _c("div", { staticClass: "ml-3 mt-2" }, [
+      _c(
+        "button",
+        {
+          staticClass:
+            "block button w-24 bg-white px-4 py-2 border border-gray-400 text-purple-600 rounded-md justify-center text-sm font-semibold mb-2 hover:bg-purple-600 hover:text-white"
+        },
+        [
           _c(
-            "button",
+            "div",
             {
               staticClass:
-                "block button w-24 bg-white px-4 py-2 border border-gray-400 text-purple-600 rounded-md justify-center text-sm font-semibold mb-2 hover:bg-purple-600 hover:text-white"
+                "tooltip focus:outline-none inline-flex mr-2 items-center"
             },
             [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "tooltip focus:outline-none inline-flex mr-2 items-center"
-                },
-                [
-                  _c("i", { staticClass: "fas fa-plus pr-1" }),
-                  _vm._v("Add\n                ")
-                ]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass:
-                "block button w-24 bg-white px-4 py-2 border border-gray-400 text-purple-600 rounded-md justify-center text-sm font-semibold hover:bg-purple-600 hover:text-white"
-            },
-            [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "tooltip focus:outline-none inline-flex mr-2 items-center"
-                },
-                [
-                  _c("i", { staticClass: "fas fa-save pr-1" }),
-                  _vm._v("Save\n                ")
-                ]
-              )
+              _c("i", { staticClass: "fas fa-plus pr-1" }),
+              _vm._v("Add\n                ")
             ]
           )
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "w-full h-screen flex items-center justify-center",
-            attrs: { id: "container" }
-          },
-          [
-            _c(
-              "div",
-              {
-                staticClass:
-                  "laraflow-editor-elements absolute rounded-full antialiased font-semibold shadow shadow-md cursor-pointer h-16 w-16 bg-green-100 border border-green-500 flex items-center justify-center",
-                attrs: { id: "laraflow-editor-start" }
-              },
-              [_vm._v("Start")]
-            )
-          ]
-        )
-      ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass:
+            "block button w-24 bg-white px-4 py-2 border border-gray-400 text-purple-600 rounded-md justify-center text-sm font-semibold hover:bg-purple-600 hover:text-white"
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass:
+                "tooltip focus:outline-none inline-flex mr-2 items-center"
+            },
+            [
+              _c("i", { staticClass: "fas fa-save pr-1" }),
+              _vm._v("Save\n                ")
+            ]
+          )
+        ]
+      )
     ])
   }
 ]

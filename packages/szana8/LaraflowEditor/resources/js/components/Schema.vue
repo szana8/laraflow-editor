@@ -1,5 +1,5 @@
 <template>
-    <div class="flex" id="schema">
+    <div class="flex w-full" id="schema">
         <div class="flex bg-gray-200 w-full h-screen">
              <div class="ml-3 mt-2">
                 <button class="block button w-24 bg-white px-4 py-2 border border-gray-400 text-purple-600 rounded-md justify-center text-sm font-semibold mb-2 hover:bg-purple-600 hover:text-white">
@@ -13,11 +13,13 @@
                     </div>
                 </button>
             </div>
-            <div id="container" class="w-full h-screen flex items-center justify-center">
+            <div id="container" class="w-full h-screen flex justify-center pt-8" ref="container">
                 <div id="laraflow-editor-start" class="laraflow-editor-elements absolute rounded-full antialiased font-semibold shadow shadow-md cursor-pointer h-16 w-16 bg-green-100 border border-green-500 flex items-center justify-center">Start</div>
 
+
                 <!-- <div id="laraflow-editor-step" class="laraflow-editor-elements absolute rounded-md antialiased font-semibold shadow shadow-md cursor-pointer px-8 py-2 bg-blue-100 border border-blue-500 flex items-center justify-center">Event Name</div>
-                <div id="laraflow-editor-end" class="laraflow-editor-elements absolute rounded-full antialiased font-semibold shadow shadow-md cursor-pointer h-16 w-16 bg-red-100 border border-red-500 flex items-center justify-center">End</div> -->
+                <div id="laraflow-editor-end" class="laraflow-editor-elements absolute rounded-full antialiased font-semibold shadow shadow-md cursor-pointer h-16 w-16 bg-red-100 border border-red-500 flex items-center justify-center">End</div>-->
+
             </div>
         </div>
     </div>
@@ -204,7 +206,7 @@ export default {
 
     instance.batch(function () {
 
-        _addEndpoints("laraflow-editor-start", ["RightMiddle"], []);
+        _addEndpoints("laraflow-editor-start", ["BottomCenter"], []);
         // _addEndpoints("laraflow-editor-step", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
         // _addEndpoints("laraflow-editor-end", [], ["TopCenter"]);
 
