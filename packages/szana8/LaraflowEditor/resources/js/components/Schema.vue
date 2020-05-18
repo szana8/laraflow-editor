@@ -12,9 +12,22 @@
                         <i class="fas fa-save pr-1"/>Save
                     </div>
                 </button>
+
+                
+
             </div>
+
             <div id="container" class="w-full h-screen flex justify-center pt-8" ref="container">
-                <div id="laraflow-editor-start" class="laraflow-editor-elements absolute rounded-full antialiased font-semibold shadow shadow-md cursor-pointer h-16 w-16 bg-green-100 border border-green-500 flex items-center justify-center">Start</div>
+                <button class="absolute items-end button w-4 bg-white border border-gray-400 text-purple-600 rounded-md justify-end text-sm font-semibold hover:bg-purple-600 hover:text-white">
+                    <div class="tooltip focus:outline-none inline-flex mr-2 items-center">
+                        <i class="fas fa-plus pr-1"/>
+                    </div>
+                </button>
+            </div>
+            
+
+            <div id="container" class="w-full h-screen flex justify-center pt-8" ref="container">
+                <div id="laraflow-editor-start" class="laraflow-editor-elements absolute rounded-full antialiased font-semibold shadow shadow-md cursor-move h-16 w-16 bg-green-100 border border-green-500 flex items-center justify-center">Start</div>
 
 
                 <!-- <div id="laraflow-editor-step" class="laraflow-editor-elements absolute rounded-md antialiased font-semibold shadow shadow-md cursor-pointer px-8 py-2 bg-blue-100 border border-blue-500 flex items-center justify-center">Event Name</div>
@@ -45,16 +58,21 @@ export default {
                 outlineStroke: "white",
                 outlineWidth: 2
             },
-             connectorHoverStyle: {
+            
+            connectorHoverStyle: {
                 strokeWidth: 3,
                 stroke: "#216477",
                 outlineWidth: 5,
-                outlineStroke: "white"
+                outlineStroke: "white",
+                cursor: "pointer",
             },
+
             endpointHoverStyle: {
                 fill: "#216477",
-                stroke: "#216477"
+                stroke: "#216477",
+                cursor: "pointer"
             },
+
             sourceEndpoint: {
                 endpoint: "Dot",
                 paintStyle: {
@@ -64,6 +82,7 @@ export default {
                     strokeWidth: 1
                 },
                 isSource: true,
+                connectionsDetachable:true, 
                 maxConnections: -1,
                 connector: [ "Flowchart", { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
                 connectorStyle: this.connectorPaintStyle,
@@ -79,7 +98,7 @@ export default {
                     } ]
                 ]
             },
-             targetEndpoint: {
+            targetEndpoint: {
                 endpoint: "Dot",
                 paintStyle: {
                     fill: "#7AB02C",
@@ -87,26 +106,21 @@ export default {
                 },
                 hoverPaintStyle: this.endpointHoverStyle,
                 maxConnections: -1,
+                connectionsDetachable:true,
                 dropOptions: { hoverClass: "hover", activeClass: "active" },
                 isTarget: true,
                 overlays: [
                     [ "Label", { location: [0.5, -0.5], cssClass: "endpointTargetLabel", visible:true } ]
                 ]
             },
-            basicType: {
-                connector: "StateMachine",
-                paintStyle: { stroke: "red", strokeWidth: 4 },
-                hoverPaintStyle: { stroke: "blue" },
-                overlays: [
-                    "Arrow"
-                ]
-            },
         }
     },
 
     mounted() {
+        EventBus.$on('detach', this.detach);
+
         jsPlumb.ready(function() {
-            jsPlumb.Defaults.Container = $("#container");
+            //jsPlumb.Defaults.Container = $("#container");
         });
 
         this.instance = jsPlumb.getInstance({
@@ -122,10 +136,10 @@ export default {
                     id: "ARROW"
                 }]
             ],
-            Container: "canvas"
+            Container: "container"
         });
 
-        this.instance.registerConnectionType("basic", this.basicType);
+        //this.instance.registerConnectionType("basic", this.basicType);
 
         // var  _saveFlowchart = function () {
         //     var totalCount = 0;
@@ -186,22 +200,28 @@ export default {
         //         }
         //     }
         // }
-        this.$nextTick(()=>{
+
             this.addEndpoints("laraflow-editor-start", ["BottomCenter"], []);
-            this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-start"), { grid: [20, 20] });
+            this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-start"), { grid: [1, 1] });
 
              this.instance.bind("connectionDrag", function (connection) {
+                console.log(connection);
                 console.log("connection " + connection.id + " is being dragged. suspendedElement is ", connection.suspendedElement, " of type ", connection.suspendedElementType);
             });
 
              //listen for clicks on connections, and offer to delete connections on click.
 
             this.instance.bind("click", function (conn, originalEvent) {
-                if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-                    this.instance.detach(conn);
+                if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?")) {
+                    //EventBus.$emit('loading', true);
+                    EventBus.$emit('detach', conn);
+                }
             });
 
-           this.instance.batch(function () {
+        this.$nextTick(()=> {
+            
+            this.instance.repaintEverything();
+           // this.instance.batch(function () {
 
                 // _addEndpoints("laraflow-editor-step", ["LeftMiddle", "BottomCenter"], ["TopCenter", "RightMiddle"]);
                 // _addEndpoints("laraflow-editor-end", [], ["TopCenter"]);
@@ -215,10 +235,6 @@ export default {
                 //this.instance.draggable(jsPlumb.getSelector(".laraflow-editor-elements"), { grid: [20, 20] });
 
 
-
-
-
-
                 // this.instance.bind("connectionDragStop", function (connection) {
                 //    _saveFlowchart();
                 // });
@@ -226,7 +242,7 @@ export default {
                 // this.instance.bind("connectionMoved", function (params) {
                 //     console.log("connection " + params.connection.id + " was moved");
                 // });
-            });
+            // });
         });
     },
 
@@ -235,7 +251,8 @@ export default {
             for (var i = 0; i < sourceAnchors.length; i++) {
                 var sourceUUID = toId + sourceAnchors[i];
                 this.instance.addEndpoint( toId, this.sourceEndpoint, {
-                    anchor: sourceAnchors[i], uuid: sourceUUID
+                    anchor: sourceAnchors[i], 
+                    uuid: sourceUUID,
                 });
             }
             for (var j = 0; j < targetAnchors.length; j++) {
@@ -248,33 +265,14 @@ export default {
             this.elementID++;
             $('#container').append('<div id="laraflow-editor-step-'+this.elementID+'" class="laraflow-editor-elements absolute rounded-md antialiased font-semibold shadow shadow-md cursor-pointer px-8 py-2 bg-blue-100 border border-blue-500 flex items-center justify-center">Event Name</div>');
             this.addEndpoints("laraflow-editor-step-" + this.elementID, [], ["TopCenter"]);
-            this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-step-"+this.elementID), { grid: [20, 20] });
+            this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-step-"+this.elementID), { grid: [1, 1] });
         },
+
+        detach(conn) {
+            this.instance.deleteConnection(conn);
+        }
     }
 }
 
 </script>
-<style>
-.window {
-    border: 0.1em solid black;
-    width: 100px;
-    height: 100px;
-    position: absolute;
-}
 
-#window1 {
-    left: 2em;
-    top: 2em;
-}
-
-#window2 {
-    left: 5em;
-    top: 10em;
-}
-
-#window3 {
-    left: 20em;
-    top: 5em;
-}
-
-</style>

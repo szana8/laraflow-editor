@@ -66,7 +66,7 @@
     "repositories": {
         "szana8/larafloweditor": {
             "type": "path",
-            "url": "C:\\laragon\\www\\laraflow-editor\\packages/szana8/LaraflowEditor"
+            "url": "/Users/pisti/code/laraflow-editor/packages/szana8/LaraflowEditor"
         }
     }
 }

@@ -5,7 +5,7 @@
                 <img class="logo mr-2 w-5 h-5" src="vendor/LaraflowEditor/images/icons/icon.png">
 
                 <a class="text-gray-900 no-underline text-lg font-thin">
-                    <span class="font-bold">Laraflow</span> Editor
+                    <span class="font-bold antialiased">Laraflow</span> Editor
                 </a>
             </div>
 
