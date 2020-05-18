@@ -1,12 +1,12 @@
 <template>
-    <div class="sidebar bg-white h-screen fixed border-r border-gray-400">
+    <div class="sidebar bg-white h-screen border-r border-gray-400 w-16">
         <div v-for="tab in tabs" :key="tab" class="flex tab text-lg">
-            <div class="dropdown inline-block relative bg-transparent pt-2 pl-5">
+            <div class="dropdown inline-block relative bg-transparent pt-2 pl-5 text-purple-600">
                 <button @click="setTab(tab)"
                         :class="{ 'text-purple-600' : active === tab }"
                         class="tooltip focus:outline-none text-black inline-flex mr-2
                         items-center text-purple-300 hover:text-purple-500">
-                    <i class="fas fa-sitemap mb-2 pr-1"/> {{ tab }}
+                    <i class="fas fa-sitemap mb-2 pr-1"/>
                 </button>
             </div>
         </div>
@@ -39,15 +39,14 @@
 
         data() {
             return {
-                active: Schematics.activeTab,
+                active: LaraflowEditor.activeTab,
                 tabs: parseInt(localStorage.getItem('schematics-tabs')) || 1,
             }
         },
 
         methods: {
-            setTab(tab) {
-                Schematics.activeTab = tab;
-
+             setTab(tab) {
+                LaraflowEditor.activeTab = tab;
                 localStorage.setItem('schematics-active-tab', tab);
 
                 EventBus.$emit('loading', true);
@@ -82,16 +81,3 @@
         }
     }
 </script>
-
-<style>
-    .sidebar {
-        top: 70px;
-        width: 70px;
-        z-index: 200;
-    }
-
-    .tab {
-        padding-top: 30px;
-        height: 70px;
-    }
-</style>

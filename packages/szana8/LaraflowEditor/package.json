@@ -36,8 +36,11 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.12.1",
         "balloon-css": "^1.0.4",
+        "draggable": "^4.2.0",
+        "draggable-vue-directive": "^2.1.0",
         "dragselect": "^1.13.1",
         "jquery": "^3.4.1",
+        "jquery-ui": "^1.12.1",
         "jsplumb": "^2.12.9",
         "tailwindcss": "^1.2.0",
         "vuedraggable": "^2.23.2"
