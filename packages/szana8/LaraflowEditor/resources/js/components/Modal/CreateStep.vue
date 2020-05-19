@@ -8,7 +8,7 @@
 
         <!-- body -->
         <div class="p-4 pl-20 relative">
-            <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" placeholder="Process Name" v-model="processName" />
+            <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" placeholder="Step Name" v-model="stepName" />
         </div>
 
         <!-- footer -->
@@ -23,13 +23,36 @@
 </template>
 
 <script>
-    export default {
-        name: "model-fields",
 
-        data() {
-            return {
-                processName: null
+export default {
+    data() {
+        return {
+            display: false,
+            stepName: null,
+        }
+    },
+    mounted() {
+        EventBus.$on('openNewStepModal', this.show);
+    },
+    methods: {
+        show() {
+            this.display = true;
+        },
+
+        hide() {
+            this.stepName = null;
+            EventBus.$emit('modal-close');
+        },
+
+        save() {
+            if (this.stepName) {
+                EventBus.$emit('addStep', this.stepName);
+
+                this.hide();
             }
         }
     }
+};
+
 </script>
+

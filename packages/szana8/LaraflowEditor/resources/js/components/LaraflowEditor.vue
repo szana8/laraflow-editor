@@ -1,10 +1,11 @@
 <template>
 	<div class="laraflow-editor">
 		<nav-bar />
-        <div class="h-screen flex">
+        <div class="h-screen flex items-center justify-center">
             <side-bar/>
             <loading />
             <schema />
+            <modal />
         </div>
 	</div>
 </template>
@@ -14,6 +15,7 @@
     import Loading from './Loading.vue';
     import Sidebar from './Sidebar.vue'
     import Schema from './Schema.vue';
+    import Modal from './Modal.vue';
 
     export default {
         name: 'laraflow-editor',
@@ -22,7 +24,8 @@
         	'nav-bar': NavigationBar,
         	'loading': Loading,
             'side-bar': Sidebar,
-            'schema': Schema
+            'schema': Schema,
+            'modal': Modal
         },
         mounted() {
             //EventBus.$emit('loading', true);

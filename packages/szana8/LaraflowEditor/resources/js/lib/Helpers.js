@@ -39,6 +39,13 @@ export default {
                     !unique.some(y => x[key] === y[key])
                 );
             }));
-        }
+        },
+
+        initConn(connection) {
+            alert('i');
+            console.log(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
+            connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
+        },
+
     }
 };
