@@ -65,7 +65,7 @@ export default {
                 connectorHoverStyle: {
                     strokeWidth: 3,
                     stroke: "#216477",
-                    outlineWidth: 5,
+                    outlineWidth: 0,
                     outlineStroke: "white",
                     cursor: 'pointer'
                 },
@@ -142,7 +142,6 @@ export default {
         this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-start"), { grid: [10, 10] });
 
 
-
         this.$nextTick(()=> {
             //listen for clicks on connections, and offer to delete connections on click.
             this.instance.bind("click", function (conn, originalEvent) {
@@ -152,6 +151,10 @@ export default {
             //listen for new connections; initialise them the same way we initialise the connections at startup.
             this.instance.bind("connection", function (connInfo, originalEvent) {
                 connInfo.connection.getOverlay("label").setLabel('Valami label');
+            });
+
+            this.instance.bind("endpointClick", function () {
+                alert('Endpoint click!');
             });
 
             $('html').keyup(function(e){
@@ -188,7 +191,7 @@ export default {
 
         addStep(stepName) {
             this.elementID++;
-            $('#container').append('<div id="laraflow-editor-step-'+this.elementID+'" class="laraflow-editor-elements absolute rounded-md antialiased font-semibold shadow shadow-md cursor-pointer px-8 py-2 bg-blue-100 border border-blue-500 flex items-center justify-center">'+ stepName +'</div>');
+            $('#container').append('<div id="laraflow-editor-step-'+this.elementID+'" class="laraflow-editor-elements max-w-md absolute rounded-md antialiased font-semibold shadow shadow-md cursor-pointer px-8 py-2 bg-blue-100  border border-blue-500 flex items-center justify-center hover:bg-blue-200">'+ stepName +'</div>');
             this.addEndpoints("laraflow-editor-step-" + this.elementID, ["RightMiddle", "BottomCenter"], ["TopCenter", "LeftMiddle"]);
             this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-step-"+this.elementID), { grid: [10, 10] });
         },
@@ -235,6 +238,10 @@ export default {
                 conn.setPaintStyle({stroke: "red"});
             }
 
+        },
+
+        selectElement(id) {
+            alert(id);
         }
     }
 };

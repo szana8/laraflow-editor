@@ -87,9 +87,9 @@
 /******/ ({
 
 /***/ "../../../node_modules/vue/dist/vue.common.dev.js":
-/*!******************************************************************************!*\
-  !*** C:/laragon/www/laraflow-editor/node_modules/vue/dist/vue.common.dev.js ***!
-  \******************************************************************************/
+/*!*********************************************************************************!*\
+  !*** /Users/pisti/code/laraflow-editor/node_modules/vue/dist/vue.common.dev.js ***!
+  \*********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12059,9 +12059,9 @@ module.exports = Vue;
 /***/ }),
 
 /***/ "../../../node_modules/vue/dist/vue.common.js":
-/*!**************************************************************************!*\
-  !*** C:/laragon/www/laraflow-editor/node_modules/vue/dist/vue.common.js ***!
-  \**************************************************************************/
+/*!*****************************************************************************!*\
+  !*** /Users/pisti/code/laraflow-editor/node_modules/vue/dist/vue.common.js ***!
+  \*****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12372,7 +12372,7 @@ __webpack_require__.r(__webpack_exports__);
         connectorHoverStyle: {
           strokeWidth: 3,
           stroke: "#216477",
-          outlineWidth: 5,
+          outlineWidth: 0,
           outlineStroke: "white",
           cursor: 'pointer'
         },
@@ -12459,6 +12459,10 @@ __webpack_require__.r(__webpack_exports__);
         connInfo.connection.getOverlay("label").setLabel('Valami label');
       });
 
+      _this.instance.bind("endpointClick", function () {
+        alert('Endpoint click!');
+      });
+
       $('html').keyup(function (e) {
         if (e.keyCode == 46) {
           EventBus.$emit('detach', this.selectedConnection);
@@ -12491,7 +12495,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     addStep: function addStep(stepName) {
       this.elementID++;
-      $('#container').append('<div id="laraflow-editor-step-' + this.elementID + '" class="laraflow-editor-elements absolute rounded-md antialiased font-semibold shadow shadow-md cursor-pointer px-8 py-2 bg-blue-100 border border-blue-500 flex items-center justify-center">' + stepName + '</div>');
+      $('#container').append('<div id="laraflow-editor-step-' + this.elementID + '" class="laraflow-editor-elements max-w-md absolute rounded-md antialiased font-semibold shadow shadow-md cursor-pointer px-8 py-2 bg-blue-100  border border-blue-500 flex items-center justify-center hover:bg-blue-200">' + stepName + '</div>');
       this.addEndpoints("laraflow-editor-step-" + this.elementID, ["RightMiddle", "BottomCenter"], ["TopCenter", "LeftMiddle"]);
       this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-step-" + this.elementID), {
         grid: [10, 10]
@@ -12535,6 +12539,9 @@ __webpack_require__.r(__webpack_exports__);
           stroke: "red"
         });
       }
+    },
+    selectElement: function selectElement(id) {
+      alert(id);
     }
   }
 });
@@ -12655,7 +12662,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".aLabel {\n  background-color: white;\n  padding: 0.4em;\n  font: 12px sans-serif;\n  color: #444;\n  z-index: 21;\n  border: 1px dotted gray;\n  opacity: 0.8;\n  cursor: pointer;\n}\n.jtk-endpoint, .endpointTargetLabel, .endpointSourceLabel {\n  z-index: 21;\n  cursor: pointer;\n}\n.aLabel.jtk-hover {\n  background-color: #5C96BC;\n  color: white;\n  border: 1px solid white;\n}\n.window.jtk-connected {\n  border: 1px solid green;\n}\n.jtk-drag {\n  outline: 4px solid pink !important;\n}\npath, .jtk-endpoint {\n  cursor: pointer;\n}\n.jtk-overlay {\n  background-color:transparent;\n}\r\n", ""]);
+exports.push([module.i, ".aLabel {\n  background-color: white;\n  padding: 0.4em;\n  font: 12px sans-serif;\n  color: #444;\n  z-index: 21;\n  border: 1px dotted gray;\n  opacity: 0.8;\n  cursor: pointer;\n}\n.jtk-endpoint, .endpointTargetLabel, .endpointSourceLabel {\n  z-index: 21;\n  cursor: pointer;\n}\n.aLabel.jtk-hover {\n  background-color: #5C96BC;\n  color: white;\n  border: 1px solid white;\n}\n.window.jtk-connected {\n  border: 1px solid green;\n}\n.jtk-drag {\n  outline: 4px solid pink !important;\n}\npath, .jtk-endpoint {\n  cursor: pointer;\n}\n.jtk-overlay {\n  background-color:transparent;\n}\n", ""]);
 
 // exports
 
@@ -41991,8 +41998,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\laraflow-editor\packages\szana8\LaraflowEditor\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\laraflow-editor\packages\szana8\LaraflowEditor\resources\scss\app.scss */"./resources/scss/app.scss");
+__webpack_require__(/*! /Users/pisti/code/laraflow-editor/packages/szana8/LaraflowEditor/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/pisti/code/laraflow-editor/packages/szana8/LaraflowEditor/resources/scss/app.scss */"./resources/scss/app.scss");
 
 
 /***/ })
