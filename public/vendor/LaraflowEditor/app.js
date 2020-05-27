@@ -87,9 +87,9 @@
 /******/ ({
 
 /***/ "../../../node_modules/vue/dist/vue.common.dev.js":
-/*!******************************************************************************!*\
-  !*** C:/laragon/www/laraflow-editor/node_modules/vue/dist/vue.common.dev.js ***!
-  \******************************************************************************/
+/*!*********************************************************************************!*\
+  !*** /Users/pisti/code/laraflow-editor/node_modules/vue/dist/vue.common.dev.js ***!
+  \*********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12059,9 +12059,9 @@ module.exports = Vue;
 /***/ }),
 
 /***/ "../../../node_modules/vue/dist/vue.common.js":
-/*!**************************************************************************!*\
-  !*** C:/laragon/www/laraflow-editor/node_modules/vue/dist/vue.common.js ***!
-  \**************************************************************************/
+/*!*****************************************************************************!*\
+  !*** /Users/pisti/code/laraflow-editor/node_modules/vue/dist/vue.common.js ***!
+  \*****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12345,7 +12345,74 @@ __webpack_require__.r(__webpack_exports__);
       selectedConnectionId: null,
       selectedConnection: null,
       instance: null,
+<<<<<<< HEAD
       zoomLevel: 1
+=======
+      zoomLevel: 1,
+      sourceEndpoint: {
+        endpoint: "Dot",
+        paintStyle: {
+          stroke: "#7AB02C",
+          fill: "transparent",
+          radius: 5,
+          strokeWidth: 1
+        },
+        isSource: true,
+        connectionsDetachable: true,
+        maxConnections: -1,
+        connector: ["Flowchart", {
+          stub: [40, 60],
+          gap: 10,
+          cornerRadius: 5,
+          alwaysRespectStubs: true
+        }],
+        connectorStyle: {
+          strokeWidth: 2,
+          stroke: "#61B7CF",
+          joinstyle: "round",
+          outlineStroke: "white",
+          outlineWidth: 2
+        },
+        hoverPaintStyle: {
+          fill: "#216477",
+          stroke: "#216477",
+          cursor: 'pointer'
+        },
+        connectorHoverStyle: {
+          strokeWidth: 3,
+          stroke: "#216477",
+          outlineWidth: 0,
+          outlineStroke: "white",
+          cursor: 'pointer'
+        },
+        dragOptions: {
+          magnetize: true
+        }
+      },
+      targetEndpoint: {
+        endpoint: "Dot",
+        paintStyle: {
+          fill: "#7AB02C",
+          radius: 5
+        },
+        hoverPaintStyle: {
+          fill: "#216477",
+          stroke: "#216477"
+        },
+        maxConnections: -1,
+        connectionsDetachable: true,
+        dropOptions: {
+          hoverClass: "hover",
+          activeClass: "active"
+        },
+        isTarget: true,
+        overlays: [["Label", {
+          location: 0.5,
+          cssClass: "endpointTargetLabel",
+          visible: true
+        }]]
+      }
+>>>>>>> d9ea4a06b1c7cf6bebf5e53ff4df213bbc4290cb
     };
   },
   mounted: function mounted() {
@@ -12368,7 +12435,16 @@ __webpack_require__.r(__webpack_exports__);
       jsPlumb.bind("connection", function (connInfo, originalEvent) {
         connInfo.connection.getOverlay("label").setLabel("Valami label");
       });
+<<<<<<< HEAD
       $("html").keyup(function (e) {
+=======
+
+      _this.instance.bind("endpointClick", function () {
+        alert('Endpoint click!');
+      });
+
+      $('html').keyup(function (e) {
+>>>>>>> d9ea4a06b1c7cf6bebf5e53ff4df213bbc4290cb
         if (e.keyCode == 46) {
           EventBus.$emit("detach", this.selectedConnection);
         }
@@ -12401,6 +12477,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     // Add a new node to the instance with a unique id
     addStep: function addStep(stepName) {
+<<<<<<< HEAD
       var elementUID = this.uuid();
       var style = this.getNewNodeStyle();
       var element = $("#container").append('<div id="' + elementUID + '">' + stepName + "</div>");
@@ -12411,6 +12488,12 @@ __webpack_require__.r(__webpack_exports__);
 
       this.addEndpoints(elementUID, ["RightMiddle", "BottomCenter"], ["TopCenter", "LeftMiddle"]);
       jsPlumb.draggable($("#" + elementUID), {
+=======
+      this.elementID++;
+      $('#container').append('<div id="laraflow-editor-step-' + this.elementID + '" class="laraflow-editor-elements max-w-md absolute rounded-md antialiased font-semibold shadow shadow-md cursor-pointer px-8 py-2 bg-blue-100  border border-blue-500 flex items-center justify-center hover:bg-blue-200">' + stepName + '</div>');
+      this.addEndpoints("laraflow-editor-step-" + this.elementID, ["RightMiddle", "BottomCenter"], ["TopCenter", "LeftMiddle"]);
+      this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-step-" + this.elementID), {
+>>>>>>> d9ea4a06b1c7cf6bebf5e53ff4df213bbc4290cb
         grid: [10, 10]
       });
     },
@@ -12456,6 +12539,9 @@ __webpack_require__.r(__webpack_exports__);
         this.selectedConnectionId = conn.id;
         conn.setPaintStyle(this.getSourceEndpointStyle().selectedConnectorStyle);
       }
+    },
+    selectElement: function selectElement(id) {
+      alert(id);
     }
   }
 });
@@ -12576,7 +12662,11 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
+<<<<<<< HEAD
 exports.push([module.i, ".aLabel {\n  background-color: white;\n  padding: 0.4em;\n  font: 12px sans-serif;\n  color: #444;\n  z-index: 21;\n  border: 1px dotted gray;\n  opacity: 0.8;\n  cursor: pointer;\n}\n.jtk-endpoint,\r\n.endpointTargetLabel,\r\n.endpointSourceLabel {\n  z-index: 21;\n  cursor: pointer;\n}\n.aLabel.jtk-hover {\n  background-color: #5c96bc;\n  color: white;\n  border: 1px solid white;\n}\n.window.jtk-connected {\n  border: 1px solid green;\n}\n.jtk-drag {\n  outline: 4px solid pink !important;\n}\npath,\r\n.jtk-endpoint {\n  cursor: pointer;\n}\n.jtk-overlay {\n  background-color: transparent;\n}\r\n", ""]);
+=======
+exports.push([module.i, ".aLabel {\n  background-color: white;\n  padding: 0.4em;\n  font: 12px sans-serif;\n  color: #444;\n  z-index: 21;\n  border: 1px dotted gray;\n  opacity: 0.8;\n  cursor: pointer;\n}\n.jtk-endpoint, .endpointTargetLabel, .endpointSourceLabel {\n  z-index: 21;\n  cursor: pointer;\n}\n.aLabel.jtk-hover {\n  background-color: #5C96BC;\n  color: white;\n  border: 1px solid white;\n}\n.window.jtk-connected {\n  border: 1px solid green;\n}\n.jtk-drag {\n  outline: 4px solid pink !important;\n}\npath, .jtk-endpoint {\n  cursor: pointer;\n}\n.jtk-overlay {\n  background-color:transparent;\n}\n", ""]);
+>>>>>>> d9ea4a06b1c7cf6bebf5e53ff4df213bbc4290cb
 
 // exports
 
@@ -42021,8 +42111,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\laraflow-editor\packages\szana8\LaraflowEditor\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\laraflow-editor\packages\szana8\LaraflowEditor\resources\scss\app.scss */"./resources/scss/app.scss");
+__webpack_require__(/*! /Users/pisti/code/laraflow-editor/packages/szana8/LaraflowEditor/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/pisti/code/laraflow-editor/packages/szana8/LaraflowEditor/resources/scss/app.scss */"./resources/scss/app.scss");
 
 
 /***/ })
