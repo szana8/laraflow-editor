@@ -73,8 +73,6 @@ export default {
       $("html").keyup(function(e) {
         if (e.keyCode == 46) {
           EventBus.$emit("detach", this.selectedConnection);
-        }
-      });
     });
   },
 
