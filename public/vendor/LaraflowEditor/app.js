@@ -12099,7 +12099,7 @@ if (false) {} else {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _NavigationBar_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NavigationBar.vue */ "./resources/js/components/NavigationBar.vue");
 /* harmony import */ var _Loading_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Loading.vue */ "./resources/js/components/Loading.vue");
-/* harmony import */ var _Sidebar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Sidebar.vue */ "./resources/js/components/Sidebar.vue");
+/* harmony import */ var _SideBar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SideBar.vue */ "./resources/js/components/SideBar.vue");
 /* harmony import */ var _Schema_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Schema.vue */ "./resources/js/components/Schema.vue");
 /* harmony import */ var _Modal_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Modal.vue */ "./resources/js/components/Modal.vue");
 //
@@ -12120,13 +12120,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'laraflow-editor',
+  name: "laraflow-editor",
   components: {
-    'nav-bar': _NavigationBar_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    'loading': _Loading_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    'side-bar': _Sidebar_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    'schema': _Schema_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-    'modal': _Modal_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+    navBar: _NavigationBar_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    loading: _Loading_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    sideBar: _SideBar_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    schema: _Schema_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    modal: _Modal_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   mounted: function mounted() {//EventBus.$emit('loading', true);
   },
@@ -12307,6 +12307,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _lib_PlumbStyles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib/PlumbStyles */ "./resources/js/lib/PlumbStyles.js");
+/* harmony import */ var _lib_Helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/Helpers */ "./resources/js/lib/Helpers.js");
 //
 //
 //
@@ -12330,210 +12332,129 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "schema",
   components: {},
+  mixins: [_lib_PlumbStyles__WEBPACK_IMPORTED_MODULE_0__["default"], _lib_Helpers__WEBPACK_IMPORTED_MODULE_1__["default"]],
   data: function data() {
     return {
       selectedConnectionId: null,
       selectedConnection: null,
-      elementID: 1,
       instance: null,
-      zoomLevel: 1,
-      sourceEndpoint: {
-        endpoint: "Dot",
-        paintStyle: {
-          stroke: "#7AB02C",
-          fill: "transparent",
-          radius: 5,
-          strokeWidth: 1
-        },
-        isSource: true,
-        connectionsDetachable: true,
-        maxConnections: -1,
-        connector: ["Flowchart", {
-          stub: [40, 60],
-          gap: 10,
-          cornerRadius: 5,
-          alwaysRespectStubs: true
-        }],
-        connectorStyle: {
-          strokeWidth: 2,
-          stroke: "#61B7CF",
-          joinstyle: "round",
-          outlineStroke: "white",
-          outlineWidth: 2
-        },
-        hoverPaintStyle: {
-          fill: "#216477",
-          stroke: "#216477",
-          cursor: 'pointer'
-        },
-        connectorHoverStyle: {
-          strokeWidth: 3,
-          stroke: "#216477",
-          outlineWidth: 5,
-          outlineStroke: "white",
-          cursor: 'pointer'
-        },
-        dragOptions: {
-          magnetize: true
-        }
-      },
-      targetEndpoint: {
-        endpoint: "Dot",
-        paintStyle: {
-          fill: "#7AB02C",
-          radius: 5
-        },
-        hoverPaintStyle: {
-          fill: "#216477",
-          stroke: "#216477"
-        },
-        maxConnections: -1,
-        connectionsDetachable: true,
-        dropOptions: {
-          hoverClass: "hover",
-          activeClass: "active"
-        },
-        isTarget: true,
-        overlays: [["Label", {
-          location: 0.5,
-          cssClass: "endpointTargetLabel",
-          visible: true
-        }]]
-      }
+      zoomLevel: 1
     };
   },
   mounted: function mounted() {
-    var _this = this;
-
-    EventBus.$on('detach', this.detach);
-    EventBus.$on('addStep', this.addStep);
-    EventBus.$on('changeLabel', this.changeLabel);
-    EventBus.$on('registerConnectionData', this.registerConnectionData);
-    EventBus.$on('resetConnectionData', this.resetConnectionData);
+    EventBus.$on("detach", this.detach);
+    EventBus.$on("addStep", this.addStep);
+    EventBus.$on("changeLabel", this.changeLabel);
+    EventBus.$on("registerConnectionData", this.registerConnectionData);
     jsPlumb.ready(function () {//
     });
-    this.instance = jsPlumb.getInstance({
-      DragOptions: {
-        cursor: 'pointer',
-        zIndex: 40
-      },
-      //the arrow overlay for the connection
-      ConnectionOverlays: [["Arrow", {
-        location: 1,
-        visible: true,
-        width: 11,
-        length: 11,
-        id: "ARROW",
-        events: {
-          dblclick: function dblclick(conn, originalEvent) {
-            console.log(conn);
-          }
-        }
-      }], ["Label", {
-        location: 0.5,
-        id: "label",
-        cssClass: "aLabel",
-        events: {
-          click: function click() {
-            EventBus.$emit('changeLabel', this);
-          }
-        }
-      }]],
-      Container: "container"
-    });
     this.addEndpoints("laraflow-editor-start", ["BottomCenter"], []);
-    this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-start"), {
+    jsPlumb.draggable(jsPlumb.getSelector("#laraflow-editor-start"), {
       grid: [10, 10]
     });
     this.$nextTick(function () {
       //listen for clicks on connections, and offer to delete connections on click.
-      _this.instance.bind("click", function (conn, originalEvent) {
-        EventBus.$emit('registerConnectionData', conn.id, conn);
+      jsPlumb.bind("click", function (conn, originalEvent) {
+        EventBus.$emit("registerConnectionData", conn.id, conn);
       }); //listen for new connections; initialise them the same way we initialise the connections at startup.
 
-
-      _this.instance.bind("connection", function (connInfo, originalEvent) {
-        connInfo.connection.getOverlay("label").setLabel('Valami label');
+      jsPlumb.bind("connection", function (connInfo, originalEvent) {
+        connInfo.connection.getOverlay("label").setLabel("Valami label");
       });
-
-      $('html').keyup(function (e) {
+      $("html").keyup(function (e) {
         if (e.keyCode == 46) {
-          EventBus.$emit('detach', this.selectedConnection);
+          EventBus.$emit("detach", this.selectedConnection);
         }
       });
     });
-    jsPlumb.fire("jsPlumbDemoLoaded", this.instance);
   },
   methods: {
     addEndpoints: function addEndpoints(toId, sourceAnchors, targetAnchors) {
       for (var i = 0; i < sourceAnchors.length; i++) {
         var sourceUUID = toId + sourceAnchors[i];
-        this.instance.addEndpoint(toId, this.sourceEndpoint, {
+        jsPlumb.addEndpoint(toId, this.getSourceEndpointStyle(), {
           isSource: true,
           isTarget: false,
           anchor: sourceAnchors[i],
-          uuid: sourceUUID
+          uuid: sourceUUID,
+          connectorOverlays: this.getConnectionOverlay()
         });
       }
 
       for (var j = 0; j < targetAnchors.length; j++) {
         var targetUUID = toId + targetAnchors[j];
-        this.instance.addEndpoint(toId, this.targetEndpoint, {
+        jsPlumb.addEndpoint(toId, this.getTargetEndpointStyle(), {
           isSource: false,
           isTarget: true,
           anchor: targetAnchors[j],
-          uuid: targetUUID
+          uuid: targetUUID,
+          connectorOverlays: this.getConnectionOverlay()
         });
       }
     },
+    // Add a new node to the instance with a unique id
     addStep: function addStep(stepName) {
-      this.elementID++;
-      $('#container').append('<div id="laraflow-editor-step-' + this.elementID + '" class="laraflow-editor-elements absolute rounded-md antialiased font-semibold shadow shadow-md cursor-pointer px-8 py-2 bg-blue-100 border border-blue-500 flex items-center justify-center">' + stepName + '</div>');
-      this.addEndpoints("laraflow-editor-step-" + this.elementID, ["RightMiddle", "BottomCenter"], ["TopCenter", "LeftMiddle"]);
-      this.instance.draggable(jsPlumb.getSelector("#laraflow-editor-step-" + this.elementID), {
+      var elementUID = this.uuid();
+      var style = this.getNewNodeStyle();
+      var element = $("#container").append('<div id="' + elementUID + '">' + stepName + "</div>");
+      $("#" + elementUID).addClass(style);
+      /*       element.bind("click", function() {
+        alert("click");
+      }); */
+
+      this.addEndpoints(elementUID, ["RightMiddle", "BottomCenter"], ["TopCenter", "LeftMiddle"]);
+      jsPlumb.draggable($("#" + elementUID), {
         grid: [10, 10]
       });
     },
+    // Open the add step modal window
     add: function add() {
-      EventBus.$emit('modal-open', '', 'new-model');
+      EventBus.$emit("modal-open", "", "new-model");
       setTimeout(function () {
-        EventBus.$emit('openNewStepModal');
+        EventBus.$emit("openNewStepModal");
       }, 1);
     },
+    // Delete a connection
     detach: function detach(conn) {
-      this.instance.deleteConnection(this.selectedConnection);
+      jsPlumb.deleteConnection(this.selectedConnection);
       this.selectedConnection = null;
       this.selectedConnectionId = null;
     },
-    resetConnectionData: function resetConnectionData() {
-      console.log('asd');
-      this.registerConnectionData(this.selectedConnectionId, this.selectedConnection);
-    },
     changeLabel: function changeLabel(label) {
-      label.setLabel('adasdad');
+      label.setLabel("You clicked the label.");
     },
+    // When a user click to a connector register the
+    // connection data and set the connector style
     registerConnectionData: function registerConnectionData(id, conn) {
+      // If the user clicked the selected connection
+      // we have to remove the selection and set
+      // the style back to the original
       if (this.selectedConnectionId == conn.id) {
-        this.selectedConnection.setPaintStyle({
-          stroke: "#61B7CF"
-        });
+        this.selectedConnection.setPaintStyle(this.getSourceEndpointStyle().connectorStyle); // than reset the properties to null
+
         this.selectedConnection = null;
         this.selectedConnectionId = null;
       } else {
+        // If the selectedConnectionId is not null
+        // a connection is already selected so
+        // we have to deselect it and set the
+        // style back to the original first
         if (this.selectedConnectionId != null) {
-          this.selectedConnection.setPaintStyle({
-            stroke: "#61B7CF"
-          });
-        }
+          this.selectedConnection.setPaintStyle(this.getSourceEndpointStyle().connectorStyle);
+        } // after that set the property to the selected
+        // connection and set the style to selected
+
 
         this.selectedConnection = conn;
         this.selectedConnectionId = conn.id;
-        conn.setPaintStyle({
-          stroke: "red"
-        });
+        conn.setPaintStyle(this.getSourceEndpointStyle().selectedConnectorStyle);
       }
     }
   }
@@ -12541,9 +12462,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Sidebar.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SideBar.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Sidebar.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SideBar.vue?vue&type=script&lang=js& ***!
   \******************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -12655,7 +12576,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".aLabel {\n  background-color: white;\n  padding: 0.4em;\n  font: 12px sans-serif;\n  color: #444;\n  z-index: 21;\n  border: 1px dotted gray;\n  opacity: 0.8;\n  cursor: pointer;\n}\n.jtk-endpoint, .endpointTargetLabel, .endpointSourceLabel {\n  z-index: 21;\n  cursor: pointer;\n}\n.aLabel.jtk-hover {\n  background-color: #5C96BC;\n  color: white;\n  border: 1px solid white;\n}\n.window.jtk-connected {\n  border: 1px solid green;\n}\n.jtk-drag {\n  outline: 4px solid pink !important;\n}\npath, .jtk-endpoint {\n  cursor: pointer;\n}\n.jtk-overlay {\n  background-color:transparent;\n}\r\n", ""]);
+exports.push([module.i, ".aLabel {\n  background-color: white;\n  padding: 0.4em;\n  font: 12px sans-serif;\n  color: #444;\n  z-index: 21;\n  border: 1px dotted gray;\n  opacity: 0.8;\n  cursor: pointer;\n}\n.jtk-endpoint,\r\n.endpointTargetLabel,\r\n.endpointSourceLabel {\n  z-index: 21;\n  cursor: pointer;\n}\n.aLabel.jtk-hover {\n  background-color: #5c96bc;\n  color: white;\n  border: 1px solid white;\n}\n.window.jtk-connected {\n  border: 1px solid green;\n}\n.jtk-drag {\n  outline: 4px solid pink !important;\n}\npath,\r\n.jtk-endpoint {\n  cursor: pointer;\n}\n.jtk-overlay {\n  background-color: transparent;\n}\r\n", ""]);
 
 // exports
 
@@ -40940,7 +40861,23 @@ var render = function() {
         _vm._m(1)
       ]),
       _vm._v(" "),
-      _vm._m(2)
+      _c(
+        "div",
+        {
+          staticClass: "w-full h-screen flex justify-center pt-8",
+          attrs: { id: "container" }
+        },
+        [
+          _c(
+            "div",
+            {
+              class: this.getStartNodeStyle(),
+              attrs: { id: "laraflow-editor-start" }
+            },
+            [_vm._v("\n        Start\n      ")]
+          )
+        ]
+      )
     ])
   ])
 }
@@ -40954,10 +40891,7 @@ var staticRenderFns = [
       {
         staticClass: "tooltip focus:outline-none inline-flex mr-2 items-center"
       },
-      [
-        _c("i", { staticClass: "fas fa-plus pr-1" }),
-        _vm._v("Add\n                ")
-      ]
+      [_c("i", { staticClass: "fas fa-plus pr-1" }), _vm._v("Add\n        ")]
     )
   },
   function() {
@@ -40979,31 +40913,8 @@ var staticRenderFns = [
           },
           [
             _c("i", { staticClass: "fas fa-save pr-1" }),
-            _vm._v("Save\n                ")
+            _vm._v("Save\n        ")
           ]
-        )
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "w-full h-screen flex justify-center pt-8",
-        attrs: { id: "container" }
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass:
-              "laraflow-editor-elements absolute rounded-full antialiased font-semibold shadow shadow-md cursor-pointer h-16 w-16 bg-green-100 border border-green-500 flex items-center justify-center",
-            attrs: { id: "laraflow-editor-start" }
-          },
-          [_vm._v("Start")]
         )
       ]
     )
@@ -41015,9 +40926,9 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Sidebar.vue?vue&type=template&id=81fbb27e&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SideBar.vue?vue&type=template&id=223abea1&":
 /*!**********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Sidebar.vue?vue&type=template&id=81fbb27e& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SideBar.vue?vue&type=template&id=223abea1& ***!
   \**********************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -41307,9 +41218,9 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.mixin(_lib_Helpers__WEBPACK_IMPORTED_
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.mixin(_lib_Elements__WEBPACK_IMPORTED_MODULE_4__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.mixin(_lib_Shortcuts__WEBPACK_IMPORTED_MODULE_5__["default"]);
 var App = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
-  el: '#app',
+  el: "#app",
   components: {
-    'laraflow-editor': _components_LaraflowEditor_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+    "laraflow-editor": _components_LaraflowEditor_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (App);
@@ -41750,17 +41661,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Sidebar.vue":
+/***/ "./resources/js/components/SideBar.vue":
 /*!*********************************************!*\
-  !*** ./resources/js/components/Sidebar.vue ***!
+  !*** ./resources/js/components/SideBar.vue ***!
   \*********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Sidebar_vue_vue_type_template_id_81fbb27e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Sidebar.vue?vue&type=template&id=81fbb27e& */ "./resources/js/components/Sidebar.vue?vue&type=template&id=81fbb27e&");
-/* harmony import */ var _Sidebar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sidebar.vue?vue&type=script&lang=js& */ "./resources/js/components/Sidebar.vue?vue&type=script&lang=js&");
+/* harmony import */ var _SideBar_vue_vue_type_template_id_223abea1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SideBar.vue?vue&type=template&id=223abea1& */ "./resources/js/components/SideBar.vue?vue&type=template&id=223abea1&");
+/* harmony import */ var _SideBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SideBar.vue?vue&type=script&lang=js& */ "./resources/js/components/SideBar.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -41770,9 +41681,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Sidebar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Sidebar_vue_vue_type_template_id_81fbb27e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Sidebar_vue_vue_type_template_id_81fbb27e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _SideBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SideBar_vue_vue_type_template_id_223abea1___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SideBar_vue_vue_type_template_id_223abea1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -41782,38 +41693,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/Sidebar.vue"
+component.options.__file = "resources/js/components/SideBar.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/Sidebar.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/components/SideBar.vue?vue&type=script&lang=js&":
 /*!**********************************************************************!*\
-  !*** ./resources/js/components/Sidebar.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/components/SideBar.vue?vue&type=script&lang=js& ***!
   \**********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Sidebar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Sidebar.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Sidebar.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Sidebar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SideBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SideBar.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SideBar.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SideBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/Sidebar.vue?vue&type=template&id=81fbb27e&":
+/***/ "./resources/js/components/SideBar.vue?vue&type=template&id=223abea1&":
 /*!****************************************************************************!*\
-  !*** ./resources/js/components/Sidebar.vue?vue&type=template&id=81fbb27e& ***!
+  !*** ./resources/js/components/SideBar.vue?vue&type=template&id=223abea1& ***!
   \****************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Sidebar_vue_vue_type_template_id_81fbb27e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Sidebar.vue?vue&type=template&id=81fbb27e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Sidebar.vue?vue&type=template&id=81fbb27e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Sidebar_vue_vue_type_template_id_81fbb27e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SideBar_vue_vue_type_template_id_223abea1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SideBar.vue?vue&type=template&id=223abea1& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SideBar.vue?vue&type=template&id=223abea1&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SideBar_vue_vue_type_template_id_223abea1___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Sidebar_vue_vue_type_template_id_81fbb27e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SideBar_vue_vue_type_template_id_223abea1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -41921,6 +41832,125 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       alert('i');
       console.log(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
       connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/lib/PlumbStyles.js":
+/*!*****************************************!*\
+  !*** ./resources/js/lib/PlumbStyles.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  methods: {
+    getSourceEndpointStyle: function getSourceEndpointStyle() {
+      return {
+        endpoint: "Dot",
+        paintStyle: {
+          stroke: "#7AB02C",
+          fill: "transparent",
+          radius: 5,
+          strokeWidth: 1
+        },
+        isSource: true,
+        connectionsDetachable: true,
+        maxConnections: -1,
+        connector: ["Flowchart", {
+          stub: [40, 60],
+          gap: 10,
+          cornerRadius: 5,
+          alwaysRespectStubs: true
+        }],
+        connectorStyle: {
+          strokeWidth: 2,
+          stroke: "#61B7CF",
+          joinstyle: "round",
+          outlineStroke: "white",
+          outlineWidth: 2
+        },
+        selectedConnectorStyle: {
+          strokeWidth: 2,
+          stroke: "#e53e3e",
+          joinstyle: "round",
+          outlineStroke: "white",
+          outlineWidth: 2
+        },
+        hoverPaintStyle: {
+          fill: "#216477",
+          stroke: "#216477",
+          cursor: "pointer"
+        },
+        connectorHoverStyle: {
+          strokeWidth: 3,
+          stroke: "#216477",
+          outlineWidth: 5,
+          outlineStroke: "white",
+          cursor: "pointer"
+        },
+        dragOptions: {
+          magnetize: true
+        }
+      };
+    },
+    getTargetEndpointStyle: function getTargetEndpointStyle() {
+      return {
+        endpoint: "Dot",
+        paintStyle: {
+          fill: "#7AB02C",
+          radius: 5
+        },
+        hoverPaintStyle: {
+          fill: "#216477",
+          stroke: "#216477"
+        },
+        maxConnections: -1,
+        connectionsDetachable: true,
+        dropOptions: {
+          hoverClass: "hover",
+          activeClass: "active"
+        },
+        isTarget: true,
+        overlays: [["Label", {
+          location: 0.5,
+          cssClass: "endpointTargetLabel",
+          visible: true
+        }]]
+      };
+    },
+    getStartNodeStyle: function getStartNodeStyle() {
+      return ["laraflow-editor-elements", "absolute", "rounded-full", "antialiased", "font-semibold", "shadow", "shadow-md", "cursor-pointer", "h-16", "w-16", "bg-green-100", "border", "border-green-500", "flex", "items-center", "justify-center"];
+    },
+    getNewNodeStyle: function getNewNodeStyle() {
+      return ["laraflow-editor-elements", "absolute", "rounded-md", "antialiased", "font-semibold", "shadow", "shadow-md", "cursor-pointer", "px-8", "py-2", "bg-blue-100", "border", "border-blue-500", "flex", "items-center", "justify-center"];
+    },
+    getConnectionOverlay: function getConnectionOverlay() {
+      return [["Arrow", {
+        location: 1,
+        visible: true,
+        width: 11,
+        length: 11,
+        id: "ARROW",
+        events: {
+          dblclick: function dblclick(conn, originalEvent) {
+            console.log(conn);
+          }
+        }
+      }], ["Label", {
+        location: 0.5,
+        id: "label",
+        cssClass: "aLabel",
+        events: {
+          click: function click() {
+            EventBus.$emit("changeLabel", this);
+          }
+        }
+      }]];
     }
   }
 });
