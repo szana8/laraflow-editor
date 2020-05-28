@@ -71,12 +71,11 @@ export default {
       });
 
       $("html").keyup(function(e) {
-        if (e.keyCode == 46)
-          EventBus.$emit("detach", this.selectedConnection);
+        if (e.keyCode == 46) EventBus.$emit("detach", this.selectedConnection);
       });
     });
+  },
 
-  }
   methods: {
     addEndpoints(toId, sourceAnchors, targetAnchors) {
       for (var i = 0; i < sourceAnchors.length; i++) {
@@ -180,7 +179,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style>
