@@ -83,6 +83,7 @@ export default {
 
         getStartNodeStyle() {
             return [
+                "model",
                 "laraflow-editor-elements",
                 "absolute",
                 "rounded-full",
@@ -104,6 +105,7 @@ export default {
 
         getNewNodeStyle() {
             return [
+                "model",
                 "laraflow-editor-elements",
                 "absolute",
                 "rounded-md",

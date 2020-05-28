@@ -24,34 +24,33 @@
   </div>
 </template>
 <script>
-import PlumbStyles from "../lib/PlumbStyles";
 import Helpers from "../lib/Helpers";
+import Plumbing from "../lib/Plumbing";
+import GlobalStyles from "../lib/GlobalStyles";
+import DragSelect from "dragselect";
 
 export default {
   name: "schema",
 
   components: {},
 
-  mixins: [PlumbStyles, Helpers],
+  mixins: [GlobalStyles, Helpers, Plumbing],
 
   data() {
     return {
-      selectedConnectionId: null,
-      selectedConnection: null,
-      instance: null,
-      zoomLevel: 1
+      selectedItems: [],
+      selectedConnection: {
+        id: null,
+        object: null
+      },
+      //selectedConnectionId: null,
+      //selectedConnection: null,
+      dragselect: null
     };
   },
 
   mounted() {
-    EventBus.$on("detach", this.detach);
-    EventBus.$on("addStep", this.addStep);
-    EventBus.$on("changeLabel", this.changeLabel);
-    EventBus.$on("registerConnectionData", this.registerConnectionData);
-
-    jsPlumb.ready(() => {
-      //
-    });
+    this.registerEvents();
 
     this.addEndpoints("laraflow-editor-start", ["BottomCenter"], []);
 
@@ -59,24 +58,34 @@ export default {
       grid: [10, 10]
     });
 
-    this.$nextTick(() => {
-      //listen for clicks on connections, and offer to delete connections on click.
-      jsPlumb.bind("click", function(conn, originalEvent) {
-        EventBus.$emit("registerConnectionData", conn.id, conn);
-      });
-
-      //listen for new connections; initialise them the same way we initialise the connections at startup.
-      jsPlumb.bind("connection", function(connInfo, originalEvent) {
-        connInfo.connection.getOverlay("label").setLabel("Valami label");
-      });
-
-      $("html").keyup(function(e) {
-        if (e.keyCode == 46) EventBus.$emit("detach", this.selectedConnection);
-      });
+    this.dragselect = new DragSelect({
+      selectables: this.$models().all(),
+      multiSelectKeys: ["altKey", "shiftKey"],
+      onElementSelect: this.select,
+      onElementUnselect: this.unselect
     });
   },
 
   methods: {
+    select(model) {
+      const $model = $(model).not(".hidden-model, .filtered");
+      $model.addClass("selected");
+      jsPlumb.addToDragSelection($model);
+    },
+
+    unselect(model) {
+      const $model = $(model).not(".hidden-model, .filtered");
+      $model.removeClass("selected");
+      jsPlumb.removeFromDragSelection($model);
+    },
+
+    registerEvents() {
+      EventBus.$on("detach", this.detach);
+      EventBus.$on("addStep", this.addStep);
+      EventBus.$on("changeLabel", this.changeLabel);
+      EventBus.$on("registerConnectionData", this.registerConnectionData);
+    },
+
     addEndpoints(toId, sourceAnchors, targetAnchors) {
       for (var i = 0; i < sourceAnchors.length; i++) {
         var sourceUUID = toId + sourceAnchors[i];
@@ -109,6 +118,8 @@ export default {
         '<div id="' + elementUID + '">' + stepName + "</div>"
       );
 
+      this.dragselect.addSelectables($("#" + elementUID));
+
       $("#" + elementUID).addClass(style);
 
       /*       element.bind("click", function() {
@@ -135,10 +146,21 @@ export default {
     },
 
     // Delete a connection
-    detach(conn) {
-      jsPlumb.deleteConnection(this.selectedConnection);
-      this.selectedConnection = null;
-      this.selectedConnectionId = null;
+    detach() {
+      if (this.selectedConnection.id != null) {
+        jsPlumb.deleteConnection(this.selectedConnection.object);
+        this.selectedConnection = null;
+        this.selectedConnectionId = null;
+      } else {
+        console.log(this.$selected().length);
+        console.log(this.$selected());
+
+        for (var i = 0; i < this.$selected().length; i++) {
+          jsPlumb.deleteConnectionsForElement(this.$selected()[i]);
+          jsPlumb.removeAllEndpoints(this.$selected()[i]);
+          $(this.$selected()[i]).remove();
+        }
+      }
     },
 
     changeLabel(label) {
@@ -151,28 +173,28 @@ export default {
       // If the user clicked the selected connection
       // we have to remove the selection and set
       // the style back to the original
-      if (this.selectedConnectionId == conn.id) {
-        this.selectedConnection.setPaintStyle(
+      if (this.selectedConnection.id == conn.id) {
+        this.selectedConnection.object.setPaintStyle(
           this.getSourceEndpointStyle().connectorStyle
         );
         // than reset the properties to null
-        this.selectedConnection = null;
-        this.selectedConnectionId = null;
+        this.selectedConnection.object = null;
+        this.selectedConnection.id = null;
       } else {
         // If the selectedConnectionId is not null
         // a connection is already selected so
         // we have to deselect it and set the
         // style back to the original first
-        if (this.selectedConnectionId != null) {
-          this.selectedConnection.setPaintStyle(
+        if (this.selectedConnection.id != null) {
+          this.selectedConnection.object.setPaintStyle(
             this.getSourceEndpointStyle().connectorStyle
           );
         }
 
         // after that set the property to the selected
         // connection and set the style to selected
-        this.selectedConnection = conn;
-        this.selectedConnectionId = conn.id;
+        this.selectedConnection.object = conn;
+        this.selectedConnection.id = conn.id;
         conn.setPaintStyle(
           this.getSourceEndpointStyle().selectedConnectorStyle
         );
@@ -220,5 +242,8 @@ path,
 
 .jtk-overlay {
   background-color: transparent;
+}
+.selected {
+  border: 2px double rgba(255, 71, 58, 0.81);
 }
 </style>
