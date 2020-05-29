@@ -3,21 +3,15 @@ export default {
         config(key) {
             let value = null;
 
-            key.split('.').forEach(key => value = value ? value[key] : Schematics.config[key]);
+            key.split(".").forEach(
+                key => (value = value ? value[key] : Schematics.config[key])
+            );
 
             return value;
         },
 
         uuid() {
-            let date = new Date().getTime();
-
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-                let random = (date + Math.random()*16)%16 | 0;
-
-                date = Math.floor(date/16);
-
-                return (c === 'x' ? random : (random&0x3|0x8)).toString(16);
-            });
+            return "div_" + new Date().getTime().toString();
         },
 
         arrayDiff(a, b) {
@@ -28,24 +22,35 @@ export default {
         },
 
         arrayDiffByKey(key, ...arrays) {
-            return [].concat(...arrays.map( (arr, i) => {
-                const others = arrays.slice(0);
+            return [].concat(
+                ...arrays.map((arr, i) => {
+                    const others = arrays.slice(0);
 
-                others.splice(i, 1);
+                    others.splice(i, 1);
 
-                const unique = [...new Set([].concat(...others))];
+                    const unique = [...new Set([].concat(...others))];
 
-                return arr.filter( x =>
-                    !unique.some(y => x[key] === y[key])
-                );
-            }));
+                    return arr.filter(
+                        x => !unique.some(y => x[key] === y[key])
+                    );
+                })
+            );
         },
 
         initConn(connection) {
-            alert('i');
-            console.log(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
-            connection.getOverlay("label").setLabel(connection.sourceId.substring(15) + "-" + connection.targetId.substring(15));
-        },
-
+            alert("i");
+            console.log(
+                connection.sourceId.substring(15) +
+                    "-" +
+                    connection.targetId.substring(15)
+            );
+            connection
+                .getOverlay("label")
+                .setLabel(
+                    connection.sourceId.substring(15) +
+                        "-" +
+                        connection.targetId.substring(15)
+                );
+        }
     }
 };

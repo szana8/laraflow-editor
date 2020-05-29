@@ -16,47 +16,47 @@
       </div>
 
       <div id="container" class="w-full h-screen flex justify-center pt-8">
-        <div id="laraflow-editor-start" :class="this.getStartNodeStyle()">
-          Start
-        </div>
+        <node v-for="node in nodes" v-bind:key="node.id" v-bind:attrs="node" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import Helpers from "../lib/Helpers";
-import Plumbing from "../lib/Plumbing";
-import GlobalStyles from "../lib/GlobalStyles";
+import Node from "./Node";
 import DragSelect from "dragselect";
+import Plumbing from "../lib/Plumbing";
 
 export default {
   name: "schema",
 
-  components: {},
+  components: { Node },
 
-  mixins: [GlobalStyles, Helpers, Plumbing],
+  mixins: [Plumbing],
 
   data() {
     return {
+      dragselect: null,
       selectedItems: [],
       selectedConnection: {
         id: null,
         object: null
       },
-      //selectedConnectionId: null,
-      //selectedConnection: null,
-      dragselect: null
+      nodes: [
+        {
+          id: this.uuid(),
+          name: "Start",
+          class: this.getStartNodeStyle(),
+          endpoints: {
+            out: ["BottomCenter"],
+            in: []
+          }
+        }
+      ]
     };
   },
 
   mounted() {
     this.registerEvents();
-
-    this.addEndpoints("laraflow-editor-start", ["BottomCenter"], []);
-
-    jsPlumb.draggable(jsPlumb.getSelector("#laraflow-editor-start"), {
-      grid: [10, 10]
-    });
 
     this.dragselect = new DragSelect({
       selectables: this.$models().all(),
@@ -86,53 +86,19 @@ export default {
       EventBus.$on("registerConnectionData", this.registerConnectionData);
     },
 
-    addEndpoints(toId, sourceAnchors, targetAnchors) {
-      for (var i = 0; i < sourceAnchors.length; i++) {
-        var sourceUUID = toId + sourceAnchors[i];
-        jsPlumb.addEndpoint(toId, this.getSourceEndpointStyle(), {
-          isSource: true,
-          isTarget: false,
-          anchor: sourceAnchors[i],
-          uuid: sourceUUID,
-          connectorOverlays: this.getConnectionOverlay()
-        });
-      }
-      for (var j = 0; j < targetAnchors.length; j++) {
-        var targetUUID = toId + targetAnchors[j];
-        jsPlumb.addEndpoint(toId, this.getTargetEndpointStyle(), {
-          isSource: false,
-          isTarget: true,
-          anchor: targetAnchors[j],
-          uuid: targetUUID,
-          connectorOverlays: this.getConnectionOverlay()
-        });
-      }
-    },
-
     // Add a new node to the instance with a unique id
-    addStep(stepName) {
-      var elementUID = this.uuid();
-      var style = this.getNewNodeStyle();
-
-      var element = $("#container").append(
-        '<div id="' + elementUID + '">' + stepName + "</div>"
-      );
-
-      this.dragselect.addSelectables($("#" + elementUID));
-
-      $("#" + elementUID).addClass(style);
-
-      /*       element.bind("click", function() {
-        alert("click");
-      }); */
-
-      this.addEndpoints(
-        elementUID,
-        ["RightMiddle", "BottomCenter"],
-        ["TopCenter", "LeftMiddle"]
-      );
-      jsPlumb.draggable($("#" + elementUID), {
-        grid: [10, 10]
+    addStep(stepName, id) {
+      this.nodes.push({
+        id: id,
+        name: stepName,
+        class: this.getNewNodeStyle(),
+        endpoints: {
+          out: ["RightMiddle", "BottomCenter"],
+          in: ["TopCenter", "LeftMiddle"]
+        }
+      });
+      this.$nextTick(() => {
+        this.dragselect.addSelectables($("#" + id));
       });
     },
 
@@ -149,20 +115,21 @@ export default {
     detach() {
       if (this.selectedConnection.id != null) {
         jsPlumb.deleteConnection(this.selectedConnection.object);
-        this.selectedConnection = null;
-        this.selectedConnectionId = null;
+        this.selectedConnection.object = null;
+        this.selectedConnection.id = null;
       } else {
-        console.log(this.$selected().length);
-        console.log(this.$selected());
-
+        // Have to remove the active connections first from the
+        // element(s)
         for (var i = 0; i < this.$selected().length; i++) {
           jsPlumb.deleteConnectionsForElement(this.$selected()[i]);
           jsPlumb.removeAllEndpoints(this.$selected()[i]);
-          $(this.$selected()[i]).remove();
         }
+
+        $(".selected").remove();
       }
     },
 
+    // Change the connection label text
     changeLabel(label) {
       label.setLabel("You clicked the label.");
     },

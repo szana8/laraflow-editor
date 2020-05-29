@@ -6,6 +6,7 @@ import jsPlumb from "jsplumb";
 import Helpers from "./lib/Helpers";
 import Elements from "./lib/Elements";
 import Shortcuts from "./lib/Shortcuts";
+import GlobalStyles from "./lib/GlobalStyles";
 import LaraflowEditor from "./components/LaraflowEditor.vue";
 
 window.$ = jQuery;
@@ -15,6 +16,7 @@ window.EventBus = new Vue({});
 Vue.mixin(Helpers);
 Vue.mixin(Elements);
 Vue.mixin(Shortcuts);
+Vue.mixin(GlobalStyles);
 
 const App = new Vue({
     el: "#app",
