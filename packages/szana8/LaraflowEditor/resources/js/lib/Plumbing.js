@@ -20,9 +20,11 @@ export default {
 
                 //listen for new connections; initialise them the same way we initialise the connections at startup.
                 jsPlumb.bind("connection", function(connInfo, originalEvent) {
-                    connInfo.connection
-                        .getOverlay("label")
-                        .setLabel("Valami label");
+                    EventBus.$emit("modal-open", "", "new-relation");
+
+                    setTimeout(() => {
+                        EventBus.$emit("openNewRelationModal", connInfo);
+                    }, 1);
                 });
 
                 $("html").keyup(function(e) {

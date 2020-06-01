@@ -38,7 +38,6 @@ export default {
         },
 
         initConn(connection) {
-            alert("i");
             console.log(
                 connection.sourceId.substring(15) +
                     "-" +

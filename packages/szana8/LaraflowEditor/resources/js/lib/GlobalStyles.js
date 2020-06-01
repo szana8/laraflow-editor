@@ -150,7 +150,7 @@ export default {
                         cssClass: "aLabel",
                         events: {
                             click() {
-                                EventBus.$emit("changeLabel", this);
+                                //EventBus.$emit("changeLabel", this);
                             }
                         }
                     }

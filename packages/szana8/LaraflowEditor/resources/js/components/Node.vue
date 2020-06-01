@@ -19,7 +19,7 @@ export default {
     );
 
     jsPlumb.draggable(jsPlumb.getSelector("#" + this.attrs.id), {
-      grid: [10, 10]
+      //grid: [10, 10]
     });
   },
 

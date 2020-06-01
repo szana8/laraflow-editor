@@ -60,29 +60,32 @@ export default {
 
     this.dragselect = new DragSelect({
       selectables: this.$models().all(),
-      multiSelectKeys: ["altKey", "shiftKey"],
+      //multiSelectKeys: ["altKey", "shiftKey"],
       onElementSelect: this.select,
       onElementUnselect: this.unselect
     });
   },
 
   methods: {
+    // Select a node or nodes
     select(model) {
       const $model = $(model).not(".hidden-model, .filtered");
       $model.addClass("selected");
-      jsPlumb.addToDragSelection($model);
+      //jsPlumb.addToDragSelection($model);
     },
 
+    // Remvoe selection from a node
     unselect(model) {
       const $model = $(model).not(".hidden-model, .filtered");
       $model.removeClass("selected");
-      jsPlumb.removeFromDragSelection($model);
+      //jsPlumb.removeFromDragSelection($model);
     },
 
+    // Register the default events for the
+    // default transactions
     registerEvents() {
       EventBus.$on("detach", this.detach);
       EventBus.$on("addStep", this.addStep);
-      EventBus.$on("changeLabel", this.changeLabel);
       EventBus.$on("registerConnectionData", this.registerConnectionData);
     },
 
@@ -127,11 +130,6 @@ export default {
 
         $(".selected").remove();
       }
-    },
-
-    // Change the connection label text
-    changeLabel(label) {
-      label.setLabel("You clicked the label.");
     },
 
     // When a user click to a connector register the
